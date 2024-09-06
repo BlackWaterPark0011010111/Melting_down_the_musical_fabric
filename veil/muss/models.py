@@ -20,6 +20,7 @@ class ConversionHistory(models.Model):
     pdf_file = models.FileField(upload_to='pdfs/')
     converted_tabs = models.TextField()
     date_uploaded = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
-        return f'{self.user.username} - {self.date_uploaded}'
+        return f"{self.user.username} - {self.date_uploaded}"
+    

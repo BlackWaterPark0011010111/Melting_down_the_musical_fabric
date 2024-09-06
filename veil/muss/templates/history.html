@@ -18,13 +18,13 @@
                 </tr>
             </thead>
             <tbody>
-                {% for history in histories %}
+                
                     <tr>
                         <td>{{ history.date_uploaded }}</td>
                         <td><a href="{{ history.pdf_file.url }}">Download PDF</a></td>
                         <td><pre>{{ history.converted_tabs }}</pre></td>
                     </tr>
-                {% endfor %}
+               
             </tbody>
         </table>
     </div>
