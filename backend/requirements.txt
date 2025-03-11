@@ -4,8 +4,6 @@ sqlalchemy
 psycopg2-binary
 opencv-python
 pillow
-fastapi
-sqlalchemy
-psycopg2-binary
 pydantic
 bcrypt
+python-multipart 
