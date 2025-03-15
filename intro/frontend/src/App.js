@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './styles.css';
+/*import React, { useState } from 'react';
+import './App.css';
 
-// Компонент RegistrationForm
 const RegistrationForm = () => {
-  console.log("RegistrationForm is rendering!"); // Проверка рендеринга
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Регистрация успешна!\nИмя: ${name}\nEmail: ${email}`);
-    setName('');
-    setEmail('');
+    try {
+      const response = await fetch('http://127.0.0.1:5000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email }),
+      });
+      const data = await response.json();
+      alert(data.message || data.error); // Показываем сообщение от сервера
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while registering.');
+    }
   };
 
   return (
@@ -45,12 +53,27 @@ const RegistrationForm = () => {
   );
 };
 
+function App() {
+  return (
+    <div className="App">
+      <h1>Music Tab Converter</h1>
+      <RegistrationForm />
+    </div>
+  );
+}
+
+export default App;
+*/
+
+import React from 'react';
+import RegistrationForm from './RegistrationForm'; // Импортируем компонент RegistrationForm
+import './App.css'; // Импортируем стили
 
 function App() {
   return (
     <div className="App">
       <h1>Music Tab Converter</h1>
-      <RegistrationForm /> {/* Использование компонента RegistrationForm */}
+      <RegistrationForm /> {/* Используем компонент RegistrationForm */}
     </div>
   );
 }

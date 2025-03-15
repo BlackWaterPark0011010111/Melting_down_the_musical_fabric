@@ -14,12 +14,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && ваш_скрипт_запуска",
-    "start": "react-scripts start",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-    
   },
   "eslintConfig": {
     "extends": [

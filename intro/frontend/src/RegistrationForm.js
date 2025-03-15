@@ -4,11 +4,33 @@ const RegistrationForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Регистрация успешна!\nИмя: ${name}\nEmail: ${email}`);
-    setName('');
-    setEmail('');
+
+    try {
+      // Используем переменную окружения
+      const apiUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${apiUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      alert(data.message); // Показываем сообщение об успешной регистрации
+      setName('');
+      setEmail('');
+    } catch (error) {
+      console.error('Error:', error);
+      alert(error.message); // Показываем сообщение об ошибке
+    }
   };
 
   return (
