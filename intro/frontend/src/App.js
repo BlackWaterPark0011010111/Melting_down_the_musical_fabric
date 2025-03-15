@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './styles.css';
 
+// Компонент RegistrationForm
 const RegistrationForm = () => {
+  console.log("RegistrationForm is rendering!"); // Проверка рендеринга
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
@@ -43,65 +45,12 @@ const RegistrationForm = () => {
   );
 };
 
+
 function App() {
-  const [file, setFile] = useState(null);
-  const [result, setResult] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!file) {
-      setError('Please select a file.');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    setResult('');
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await axios.post('http://localhost:5000/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setResult(response.data.text);
-    } catch (err) {
-      setError('Error uploading file. Please try again.');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="App">
       <h1>Music Tab Converter</h1>
-      <RegistrationForm />
-      <div className="file-upload-section">
-        <h2>Загрузите файл с нотами или табами</h2>
-        <form onSubmit={handleSubmit}>
-          <input type="file" onChange={handleFileChange} accept=".pdf,.png,.jpg,.jpeg" />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Processing...' : 'Upload'}
-          </button>
-        </form>
-        {error && <p className="error">{error}</p>}
-        {result && (
-          <div className="result">
-            <h2>Result:</h2>
-            <pre>{result}</pre>
-          </div>
-        )}
-      </div>
+      <RegistrationForm /> {/* Использование компонента RegistrationForm */}
     </div>
   );
 }
