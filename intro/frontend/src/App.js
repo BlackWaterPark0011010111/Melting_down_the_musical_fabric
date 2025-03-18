@@ -67,14 +67,14 @@ export default App;
 import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
-import Home from './components/Home'; // Главная страница
+import Home from './components/Home'; 
 import './App.css';
 
 function App() {
   // Состояние для текущей страницы
   const [currentPage, setCurrentPage] = useState('login');
 
-  // Обработчик успешного входа
+  // при успешного входа
   const handleLoginSuccess = (user) => {
     setCurrentPage('home'); // Переход на главную страницу после входа
   };
