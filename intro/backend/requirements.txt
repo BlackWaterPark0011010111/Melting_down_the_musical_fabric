@@ -2,3 +2,5 @@ flask
 pillow
 pytesseract
 pdf2image
+
+bcrypt

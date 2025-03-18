@@ -65,15 +65,43 @@ function App() {
 export default App;
 */
 
-import React from 'react';
-import RegistrationForm from './RegistrationForm'; // Импортируем компонент RegistrationForm
-import './App.css'; // Импортируем стили
+import React, { useState } from 'react';
+import Login from './components/Login';
+import Register from './components/Register';
+import Upload from './components/Upload';
+import History from './components/History';
+import './App.css';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [view, setView] = useState('login');
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+    setView('upload');
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setView('login');
+  };
+
   return (
     <div className="App">
       <h1>Music Tab Converter</h1>
-      <RegistrationForm /> {/* Используем компонент RegistrationForm */}
+      {!user ? (
+        view === 'login' ? (
+          <Login onLogin={handleLogin} onSwitchView={() => setView('register')} />
+        ) : (
+          <Register onRegister={handleLogin} onSwitchView={() => setView('login')} />
+        )
+      ) : (
+        <div>
+          <button onClick={handleLogout}>Logout</button>
+          <Upload userId={user.id} />
+          <History userId={user.id} />
+        </div>
+      )}
     </div>
   );
 }
