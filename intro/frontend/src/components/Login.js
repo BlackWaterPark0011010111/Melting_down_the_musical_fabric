@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { login } from '../api';
 
 function Login({ onLogin, onSwitchView }) {
   const [email, setEmail] = useState('');
@@ -9,10 +8,19 @@ function Login({ onLogin, onSwitchView }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await login(email, password);
-      onLogin(user);
+      const apiUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Login failed');
+
+      // Вызываем колбэк onLogin
+      if (onLogin) onLogin(data.user);
     } catch (err) {
-      setError('Invalid email or password');
+      setError('Login failed: ' + err.message); // Вывод ошибки
     }
   };
 

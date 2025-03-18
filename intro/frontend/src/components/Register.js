@@ -19,7 +19,9 @@ function Register({ onRegister, onSwitchView }) {
       const data = await response.json();
       console.log("Server response:", data);  // Логируем ответ
       if (!response.ok) throw new Error(data.error || 'Registration failed');
-      onRegister(data.user);
+
+      // Вызываем колбэк onRegister
+      if (onRegister) onRegister(data.user);
     } catch (err) {
       setError('Registration failed: ' + err.message); // Вывод ошибки
     }

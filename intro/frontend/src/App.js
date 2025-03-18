@@ -64,44 +64,52 @@ function App() {
 
 export default App;
 */
-
 import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
-import Upload from './components/Upload';
-import History from './components/History';
+import Home from './components/Home'; // Главная страница
 import './App.css';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [view, setView] = useState('login');
+  // Состояние для текущей страницы
+  const [currentPage, setCurrentPage] = useState('login');
 
-  const handleLogin = (userData) => {
-    setUser(userData);
-    setView('upload');
+  // Обработчик успешного входа
+  const handleLoginSuccess = (user) => {
+    setCurrentPage('home'); // Переход на главную страницу после входа
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    setView('login');
+  // Обработчик успешной регистрации
+  const handleRegisterSuccess = (user) => {
+    setCurrentPage('home'); // Переход на главную страницу после регистрации
+  };
+
+  // Переход на страницу регистрации
+  const handleSwitchToRegister = () => {
+    setCurrentPage('register');
+  };
+
+  // Переход на страницу входа
+  const handleSwitchToLogin = () => {
+    setCurrentPage('login');
   };
 
   return (
     <div className="App">
-      <h1>Music Tab Converter</h1>
-      {!user ? (
-        view === 'login' ? (
-          <Login onLogin={handleLogin} onSwitchView={() => setView('register')} />
-        ) : (
-          <Register onRegister={handleLogin} onSwitchView={() => setView('login')} />
-        )
-      ) : (
-        <div>
-          <button onClick={handleLogout}>Logout</button>
-          <Upload userId={user.id} />
-          <History userId={user.id} />
-        </div>
+      {/* Условный рендеринг на основе currentPage */}
+      {currentPage === 'login' && (
+        <Login
+          onLogin={handleLoginSuccess}
+          onSwitchView={handleSwitchToRegister}
+        />
       )}
+      {currentPage === 'register' && (
+        <Register
+          onRegister={handleRegisterSuccess}
+          onSwitchView={handleSwitchToLogin}
+        />
+      )}
+      {currentPage === 'home' && <Home />}
     </div>
   );
 }
