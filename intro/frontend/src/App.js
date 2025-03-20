@@ -63,40 +63,41 @@ function App() {
 }
 
 export default App;
-*/
-import React, { useState } from 'react';
+*/import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home'; 
 import './App.css';
 
 function App() {
-  // Состояние для текущей страницы
-  const [currentPage, setCurrentPage] = useState('login');
+  const [currentPage, setCurrentPage] = useState('login'); // текущая страница
+  const [user, setUser] = useState(null); //хранения данных пользователя
 
-  // при успешного входа
-  const handleLoginSuccess = (user) => {
-    setCurrentPage('home'); // Переход на главную страницу после входа
+ 
+  const handleLoginSuccess = (userData) => {
+    setUser(userData); //сохранение данных юзера
+    setCurrentPage('home'); //переход на main page
   };
 
-  // Обработчик успешной регистрации
-  const handleRegisterSuccess = (user) => {
-    setCurrentPage('home'); // Переход на главную страницу после регистрации
+  //при успешной регистрации
+  const handleRegisterSuccess = (userData) => {
+    setUser(userData); //сохраняем  юзера
+    setCurrentPage('home'); //переход на главную 
   };
 
-  // Переход на страницу регистрации
-  const handleSwitchToRegister = () => {
+  
+  const handleSwitchToRegister = () => {//переход на регистрацию
     setCurrentPage('register');
   };
 
-  // Переход на страницу входа
-  const handleSwitchToLogin = () => {
+
+  const handleSwitchToLogin = () => {  //переход на вход
     setCurrentPage('login');
   };
 
   return (
     <div className="App">
-      {/* Условный рендеринг на основе currentPage */}
+      {/*рендеринг на currentPage */}
       {currentPage === 'login' && (
         <Login
           onLogin={handleLoginSuccess}
@@ -109,7 +110,7 @@ function App() {
           onSwitchView={handleSwitchToLogin}
         />
       )}
-      {currentPage === 'home' && <Home />}
+      {currentPage === 'home' && <Home user={user} />}
     </div>
   );
 }

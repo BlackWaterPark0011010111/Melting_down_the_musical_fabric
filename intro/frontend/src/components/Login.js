@@ -17,10 +17,10 @@ function Login({ onLogin, onSwitchView }) {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Login failed');
 
-      // Вызываем колбэк onLogin
-      if (onLogin) onLogin(data.user);
+      // колбэк  на onLogin c userdata 
+      onLogin(data.user);
     } catch (err) {
-      setError('Login failed: ' + err.message); // Вывод ошибки
+      setError('Login failed: ' + err.message); //смотрим  ошибку
     }
   };
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client'; // Используем createRoot для React 18
-import App from './App'; // Импортируем компонент App
-import './App.css'; // Импортируем стили
+import App from './App'; 
+import './App.css';
 
-// Создаём корневой элемент и рендерим приложение
+//тут корневой элемент и рендерим приложение
 const container = document.getElementById('root');
-const root = createRoot(container); // Используем createRoot для React 18
+const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <App />

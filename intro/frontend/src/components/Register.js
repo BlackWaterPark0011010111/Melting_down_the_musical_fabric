@@ -9,7 +9,6 @@ function Register({ onRegister, onSwitchView }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Используем переменную окружения
       const apiUrl = process.env.REACT_APP_API_URL;
       const response = await fetch(`${apiUrl}/register`, {
         method: 'POST',
@@ -17,13 +16,12 @@ function Register({ onRegister, onSwitchView }) {
         body: JSON.stringify({ name, email, password }),
       });
       const data = await response.json();
-      console.log("Server response:", data);  // Логируем ответ
       if (!response.ok) throw new Error(data.error || 'Registration failed');
 
-      // Вызываем колбэк onRegister
-      if (onRegister) onRegister(data.user);
+      // для  колбэка onRegister 
+      onRegister(data.user);
     } catch (err) {
-      setError('Registration failed: ' + err.message); // Вывод ошибки
+      setError('Registration failed: ' + err.message); //тут смотрим ошибку,шо куда и как
     }
   };
 

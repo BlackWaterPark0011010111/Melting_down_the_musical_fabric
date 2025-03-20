@@ -1,30 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-const Home = () => {
-  const [file, setFile] = useState(null); // Состояние для выбранного файла
-  const [history, setHistory] = useState([]); // Состояние для истории загрузок
-  const [error, setError] = useState(''); // Состояние для ошибок
-  const [result, setResult] = useState(''); // Состояние для результата (распознанный текст)
+const Home = ({ user }) => {
+  const [file, setFile] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [error, setError] = useState('');
+  const [result, setResult] = useState('');
 
-  // Загрузка истории при монтировании компонента
-  useEffect(() => {
-    fetchHistory();
-  }, []);
-
-  // Функция для загрузки истории
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL;
-      const response = await fetch(`${apiUrl}/history?user_id=1`); // Замените 1 на реальный ID пользователя
+      const response = await fetch(`${apiUrl}/history?user_id=${user.id}`);
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to fetch history');
       setHistory(data.history);
     } catch (err) {
       setError('Failed to load history: ' + err.message);
     }
-  };
+  }, [user.id]);
 
-  // Обработчик загрузки файла
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
+
   const handleFileUpload = async (e) => {
     e.preventDefault();
     if (!file) {
@@ -34,7 +31,7 @@ const Home = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('user_id', 1); // Замените 1 на реальный ID пользователя
+    formData.append('user_id', user.id);
 
     try {
       const apiUrl = process.env.REACT_APP_API_URL;
@@ -45,10 +42,8 @@ const Home = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'File upload failed');
 
-      // Обновляем историю и отображаем результат
-      fetchHistory();
-      setResult(data.text); // Сохраняем распознанный текст
-      setError(''); // Очищаем ошибки
+      setResult(data.text);
+      setError('');
     } catch (err) {
       setError('File upload failed: ' + err.message);
     }

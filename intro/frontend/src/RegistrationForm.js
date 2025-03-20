@@ -8,7 +8,7 @@ const RegistrationForm = () => {
     e.preventDefault();
 
     try {
-      // Используем переменную окружения
+      //переменная окружения
       const apiUrl = process.env.REACT_APP_API_URL;
       const response = await fetch(`${apiUrl}/register`, {
         method: 'POST',
@@ -24,12 +24,12 @@ const RegistrationForm = () => {
         throw new Error(data.error || 'Registration failed');
       }
 
-      alert(data.message); // Показываем сообщение об успешной регистрации
+      alert(data.message); //сообщение об успешной регистрации
       setName('');
       setEmail('');
     } catch (error) {
       console.error('Error:', error);
-      alert(error.message); // Показываем сообщение об ошибке
+      alert(error.message); //сообщение об ошибке
     }
   };
 

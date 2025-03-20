@@ -6,7 +6,7 @@ from PIL import Image
 import pytesseract
 from pdf2image import convert_from_path
 import bcrypt
-
+from music21 import converter, stream
 app = Flask(__name__)
 CORS(app)
 
@@ -131,7 +131,6 @@ def login():
         db.close()
 
 # Маршрут для загрузки файла
-@app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
@@ -141,42 +140,37 @@ def upload_file():
         return jsonify({"error": "No selected file"}), 400
 
     if file:
-        # Сохраняем файл
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(file_path)
 
-        # Обработка PDF или изображения
         try:
-            if file.filename.endswith('.pdf'):
-                images = convert_from_path(file_path)
-                text = ""
-                for image in images:
-                    text += pytesseract.image_to_string(image)
+            # Преобразуем файл в MusicXML (если это не MusicXML)
+            if file.filename.endswith('.musicxml'):
+                score = converter.parse(file_path)
             else:
-                image = Image.open(file_path)
-                text = pytesseract.image_to_string(image)
+                # Здесь можно добавить логику для обработки изображений/PDF
+                raise Exception("Unsupported file format")
 
-            # Сохраняем перевод в базу данных
-            user_id = request.form.get('user_id')
-            if user_id:
-                db = get_db_connection()
-                cursor = db.cursor()
-                cursor.execute('INSERT INTO translations (user_id, file_name, text) VALUES (?, ?, ?)',
-                              (user_id, file.filename, text))
-                db.commit()
-                cursor.close()
+            # Преобразуем ноты в табулатуру
+            tab_stream = stream.Stream()
+            for part in score.parts:
+                for note_or_chord in part.flat.notes:
+                    if note_or_chord.isNote:
+                        tab_stream.append(note_or_chord)
+                    elif note_or_chord.isChord:
+                        for n in note_or_chord.notes:
+                            tab_stream.append(n)
 
-            # Возвращаем распознанный текст
-            return jsonify({"text": text})
+            # Экспортируем табулатуру в текстовый формат
+            tabs = tab_stream.write('text')
+            return jsonify({"text": tabs})
         except Exception as e:
             return jsonify({"error": str(e)}), 500
         finally:
-            # Удаляем файл после обработки
             if os.path.exists(file_path):
                 os.remove(file_path)
 
     return jsonify({"error": "File processing failed"}), 500
-
 # Маршрут для получения истории переводов
 @app.route('/history', methods=['GET'])
 def get_history():
