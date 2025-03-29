@@ -66,38 +66,37 @@ export default App;
 */import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
-import Home from './components/Home'; 
+import Home from './components/Home';
 import './App.css';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('login'); // текущая страница
-  const [user, setUser] = useState(null); //хранения данных пользователя
+  const [currentPage, setCurrentPage] = useState('login'); // Текущая страница
+  const [user, setUser] = useState(null); // Данные пользователя
 
- 
+  // Обработка успешного входа
   const handleLoginSuccess = (userData) => {
-    setUser(userData); //сохранение данных юзера
-    setCurrentPage('home'); //переход на main page
+    setUser(userData); // Сохраняем данные пользователя
+    setCurrentPage('home'); // Переходим на главную страницу
   };
 
-  //при успешной регистрации
+  // Обработка успешной регистрации
   const handleRegisterSuccess = (userData) => {
-    setUser(userData); //сохраняем  юзера
-    setCurrentPage('home'); //переход на главную 
+    setUser(userData); // Сохраняем данные пользователя
+    setCurrentPage('home'); // Переходим на главную страницу
   };
 
-  
-  const handleSwitchToRegister = () => {//переход на регистрацию
+  // Переключение на страницу регистрации
+  const handleSwitchToRegister = () => {
     setCurrentPage('register');
   };
 
-
-  const handleSwitchToLogin = () => {  //переход на вход
+  // Переключение на страницу входа
+  const handleSwitchToLogin = () => {
     setCurrentPage('login');
   };
 
   return (
     <div className="App">
-      {/*рендеринг на currentPage */}
       {currentPage === 'login' && (
         <Login
           onLogin={handleLoginSuccess}
